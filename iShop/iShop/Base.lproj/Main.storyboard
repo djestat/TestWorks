@@ -80,7 +80,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Цена:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tjf-Dc-L9X">
                                 <rect key="frame" x="82" y="342" width="46" height="25"/>
@@ -139,6 +139,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Продажа" id="or3-mC-NUE"/>
                     <connections>
+                        <outlet property="addButton" destination="R41-5O-f6Q" id="Rbg-RZ-i4X"/>
                         <outlet property="addProdInfoText" destination="v0Z-1j-0Ey" id="7I3-GN-pGy"/>
                         <outlet property="addProdNameLabel" destination="QTl-3l-rxw" id="Cbq-aE-hVd"/>
                         <outlet property="addProdPriceLabel" destination="gHa-Xw-1wW" id="ezA-NZ-YC4"/>
