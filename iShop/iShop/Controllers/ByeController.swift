@@ -14,19 +14,13 @@ extension Notification.Name {
 
 class ByeController: UITableViewController {
     
-    var productList2 = [Product]()
+    var productList = [Product]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
+    
         readFromJSON()
-//        updater()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .reload, object: nil)
 
     }
@@ -41,7 +35,7 @@ class ByeController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return productList2.count
+        return productList.count
     }
 
     
@@ -50,16 +44,16 @@ class ByeController: UITableViewController {
 
         // Configure the cell...
         
-        cell.productImageView.image = UIImage(named: productList2[indexPath.row].image)
-        cell.nameProductLabel.text = String(productList2[indexPath.row].name)
-        cell.priceLabel.text = String(productList2[indexPath.row].price)
+        cell.productImageView.image = UIImage(named: productList[indexPath.row].image)
+        cell.nameProductLabel.text = String(productList[indexPath.row].name)
+        cell.priceLabel.text = String(productList[indexPath.row].price)
 
         return cell
     }
     
 
     func readFromJSON() {
-        let jsonPath = Bundle.main.path(forResource: "ProductDB2", ofType: "json")
+        let jsonPath = Bundle.main.path(forResource: "ProductDB", ofType: "json")
         print(jsonPath!)
         let url = URL(fileURLWithPath: jsonPath!)
         print("\(url)  🔗")
@@ -74,21 +68,32 @@ class ByeController: UITableViewController {
         
         do {
             let db = try JSONDecoder().decode(JSONDB.self, from: data)
-            productList2 = db.products
+            productList = db.products
             print("\(db)  🎈")
         } catch {
             print("error 🎈")
         }
         
-        print(productList2)
+        print(productList)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "InfoSegue",
+            let infoVC = segue.destination as? InfoController,
+            let indexPath = tableView.indexPathForSelectedRow {
+            
+            infoVC.title = productList[indexPath.row].name
+            
+            infoVC.infoProduct = productList[indexPath.row]
+            print(productList[indexPath.row])
+ 
+        }
+    }
+    
+    
+    
+    /*
     func updater() {
-//        let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { timer in
-//            self.readFromJSON()
-//            self.tableView.reloadData()
-//            print("Timer: \(timer) - fired! \(Date.self))")
-//        }
 
         let timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
             self.readFromJSON()
@@ -96,7 +101,7 @@ class ByeController: UITableViewController {
             print("Timer: \(timer) - working! \(Date().description))")
         }
 
-    }
+    } */
     
 }
 

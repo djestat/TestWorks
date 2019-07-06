@@ -47,7 +47,7 @@ class SaleController: UIViewController {
                 var lastID = 0
                 var newJSONDB: JSONDB
                 
-                let jsonPath = Bundle.main.path(forResource: "ProductDB2", ofType: "json")
+                let jsonPath = Bundle.main.path(forResource: "ProductDB", ofType: "json")
                 let url = URL(fileURLWithPath: jsonPath!)
                 let data = try! Data(contentsOf: url)
                 
