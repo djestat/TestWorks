@@ -14,12 +14,12 @@ struct PointCoordinats: Codable {
     var cod: Int
     var coord: Coord
     var dt: Int
-    var id: Int
+    var id: Int?
     var main: Temperatyre
     var name: String
     var sys: Sys
     var timezone: Int
-    var visibility: Int
+    var visibility: Int?
     var weather: [Weather]
     var wind: Wind
 }
@@ -35,7 +35,7 @@ struct Coord: Codable {
 
 struct Temperatyre: Codable {
     var humidity: Int
-    var pressure: Int
+    var pressure: Double
     var temp: Double
     var tempMax: Double
     var tempMin: Double
@@ -51,11 +51,11 @@ struct Temperatyre: Codable {
 
 struct Sys: Codable {
     var country: String
-    var id: Int
+    var id: Int?
     var message: Double
     var sunrise: Int
     var sunset: Int
-    var type: Int
+    var type: Int?
 }
 
 struct Weather: Codable {
@@ -66,7 +66,7 @@ struct Weather: Codable {
 }
 
 struct Wind: Codable {
-    var deg: Int
+    var deg: Double?
     var speed: Double
 }
 

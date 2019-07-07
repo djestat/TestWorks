@@ -10,7 +10,7 @@ import Foundation
 
 class Networking {
     
-    public func loadWeather(_ lat: Double, _ lon: Double) {
+    public func loadWeather(_ lat: Double, _ lon: Double, completion: ((Swift.Result<PointCoordinats, Error>) -> Void)? = nil) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -39,8 +39,8 @@ class Networking {
         let task = session.dataTask(with: request) { (data, response, error) in
             
             guard let data = data else { return }
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
-            
+//            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+
 //            print(json ?? "")
 //            print(data)
 
@@ -48,8 +48,10 @@ class Networking {
             
             do {
                 let weather = try decoder.decode(PointCoordinats.self, from: data)
+                completion?(Result.success(weather))
 //                print("This do print \(weather)")
             } catch {
+                completion?(Result.failure(error))
 //                print("This error print \(error.localizedDescription)")
             }
             

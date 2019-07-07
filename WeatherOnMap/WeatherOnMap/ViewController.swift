@@ -11,13 +11,10 @@ import MapKit
 
 class ViewController: UIViewController {
     
-    var weatherPoint = [CLLocationCoordinate2D]()
+    var weatherPoint = CLLocationCoordinate2D()
     var coordinates = [PointCoordinats]()
     
     let getWeatherOW = Networking()
-    
-    let latitude = 55.59179844510567
-    let longitude = 37.64727898254918
     
     @IBOutlet weak var mapKitView: MKMapView!
     
@@ -27,45 +24,74 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         mapKitView.delegate = self
         
-//        getLocation()
-        var w = getWeatherOW.loadWeather(latitude, longitude)
-        print(w)
-
+        getLocation()
+        
     }
     
-    func getCoordinateFromMap(for mapView: MKMapView) -> [CLLocationCoordinate2D] {
+    func getCoordinateFromMap(for mapView: MKMapView) -> CLLocationCoordinate2D {
         
         let point = mapView.center
         let centerFrame = mapView.convert(point, toCoordinateFrom: mapView)
-        print(centerFrame)
-        
-        let lat = centerFrame.latitude
-        let lon = centerFrame.longitude
-        
-//        getWeatherOW.loadWeather(lat, lon)
-        
-        return [centerFrame]
+//        print("Center of frame coordinate: \(centerFrame)")
+
+        return centerFrame
     }
     
     func getLocation() {
         Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
-            self.removeAnnotation()
+//            self.removeAnnotation()
             self.weatherPoint = self.getCoordinateFromMap(for: self.mapKitView)
-            print("WeatherPoint \(self.weatherPoint))")
-            let placemark = self.weatherPoint.first
-            let annotation = MKPointAnnotation()
-            annotation.title = "Here"
-            annotation.coordinate.latitude = placemark!.latitude
-            annotation.coordinate.longitude = placemark!.longitude
+//            print("WeatherPoint \(self.weatherPoint))")
+            let placemark = self.weatherPoint
             
-            print(annotation.coordinate)
-
-            self.mapKitView.addAnnotation(annotation)
-//            self.mapView.selectAnnotation(annotation, animated: true)
+            let lat = placemark.latitude
+            let lon = placemark.longitude
+//            print("Coordinates \(lat) and \(lon)")
+            self.getWeatherFromOW(lat, lon)
+            
+            if self.coordinates.count != 0 {
+                let newAnnotation = self.coordinates.last
+                
+                let annotation = MKPointAnnotation()
+                annotation.title = newAnnotation!.name
+                annotation.subtitle = String(format: "%.2f", newAnnotation!.main.temp - 273.15)
+                annotation.coordinate.latitude = newAnnotation!.coord.lat
+                annotation.coordinate.longitude = newAnnotation!.coord.lon
+                
+//                print("This annotation coordinates: \(annotation.coordinate)")
+                
+                self.mapKitView.addAnnotation(annotation)
+            }
             
         }
         
     }
+    
+    // MARK: - Send weather get request
+
+    func getWeatherFromOW(_ latitude: Double, _ longitude: Double ) {
+        
+        let lat = latitude
+        let lon = longitude
+        
+        DispatchQueue.global().async {
+            self.getWeatherOW.loadWeather(lat, lon) { result in
+                print("Result \(result)")
+                switch result {
+                case .success(let newPoint):
+                    self.coordinates.append(newPoint)
+//                    print("This newPoint: \(newPoint)")
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+//                print("This ARRAY coordinates[]: \(self.coordinates)")
+            }
+        
+        }
+        
+    }
+    
+    //MARK: - Annotation
     
     func removeAnnotation() {
         let annotations = mapKitView.annotations
@@ -74,22 +100,10 @@ class ViewController: UIViewController {
         }
     }
     
-    //MARK: - Annotation change image
-    
-    func load(url: URL) {
-        
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-//                        self?.image = image
-                        print(image.size)
-                    }
-                }
-            }
-        }
+    @IBAction func deletAnnotation(_ sender: Any) {
+        removeAnnotation()
     }
-    
+  
 }
 
 
@@ -101,18 +115,23 @@ extension ViewController: MKMapViewDelegate {
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "")
         }
+        
+        /*
         if annotation.title == "Here" {
             annotationView?.image = UIImage(named: "weather")
             annotationView?.frame.size = CGSize(width: 50, height: 50)
+        } else {
+            annotationView?.image = UIImage(named: "weather")
+            annotationView?.frame.size = CGSize(width: 50, height: 50)
+        }*/
+        
+        for i in 0..<coordinates.count {
+            if annotation.title == coordinates[i].name {
+                let image = coordinates[i].weather[0].icon
+                annotationView?.image = UIImage(named: image)
+                annotationView?.frame.size = CGSize(width: 80, height: 80)
+            }
         }
-        
-//        let url = URL(fileURLWithPath: "http://openweathermap.org/img/wn/04d@2x.png")
-//        let image = try! Data(contentsOf: url)
-        
-//        annotationView?.image = UIImage(data: image)
-        
-//        http://openweathermap.org/img/wn/04d@2x.png
-        
         
         annotationView?.canShowCallout = true
         
