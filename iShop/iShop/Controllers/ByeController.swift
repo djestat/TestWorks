@@ -46,27 +46,35 @@ class ByeController: UITableViewController {
         
         cell.productImageView.image = UIImage(named: productList[indexPath.row].image)
         cell.nameProductLabel.text = String(productList[indexPath.row].name)
-        cell.priceLabel.text = String(productList[indexPath.row].price)
+        cell.priceLabel.text = String("₽ \(productList[indexPath.row].price)")
 
         return cell
     }
     
 
     func readFromJSON() {
+        
+        let storage = FileManager.default
+        let fm = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let file = fm.appendingPathComponent("ProductDB.json")
+        
         let jsonPath = Bundle.main.path(forResource: "ProductDB", ofType: "json")
         print(jsonPath!)
         let url = URL(fileURLWithPath: jsonPath!)
         print("\(url)  🔗")
-        let data = try! Data(contentsOf: url)
-        print("\(data)  📊")
-        let obj = try! JSONSerialization.jsonObject(with: data, options: .mutableContainers)
-        print("\(obj)  📦")
         
-        if let products = (obj as! NSObject).value(forKey: "products") {
-            print(products)
+        if storage.fileExists(atPath: file.path) == false {
+            
+            do {
+                try! storage.copyItem(atPath: url.path, toPath: file.path)
+                print(file)
+            }
+            
         }
         
         do {
+            let data = try! Data(contentsOf: file)
+            print("\(data)  📊")
             let db = try JSONDecoder().decode(JSONDB.self, from: data)
             productList = db.products
             print("\(db)  🎈")

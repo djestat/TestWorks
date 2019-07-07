@@ -166,19 +166,19 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AX6-p4-61N">
-                                            <rect key="frame" x="324" y="18" width="80" height="25"/>
+                                            <rect key="frame" x="365" y="18" width="39" height="25"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="25" id="E7x-AX-csR"/>
-                                                <constraint firstAttribute="width" constant="80" id="XXl-L7-cne"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="120" id="XXl-L7-cne"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.84992308940000005" green="0.32419319019999998" blue="0.2764969685" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Prod name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C0q-o8-mdd">
-                                            <rect key="frame" x="60" y="18" width="120" height="25"/>
+                                            <rect key="frame" x="60" y="18" width="83" height="25"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="120" id="6Og-bY-pln"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="160" id="6Og-bY-pln"/>
                                                 <constraint firstAttribute="height" constant="25" id="rhu-qM-E5n"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
