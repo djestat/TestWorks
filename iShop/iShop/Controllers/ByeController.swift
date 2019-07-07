@@ -99,18 +99,6 @@ class ByeController: UITableViewController {
     }
     
     
-    
-    /*
-    func updater() {
-
-        let timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
-            self.readFromJSON()
-            self.tableView.reloadData()
-            print("Timer: \(timer) - working! \(Date().description))")
-        }
-
-    } */
-    
 }
 
 
